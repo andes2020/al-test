@@ -6,11 +6,18 @@
 
     # This task curl http://loadbalancer
     # and check if it reaches web1 or web2
-    - name: Test loadbalancer nginx is configured with correct html response!
+    - name: Try to get web1 response from loadbalancer
       uri:
         url: http://loadbalancer
         return_content: true
-      register: result
-      failed_when:
-        - "'<title>This is server web1</title>' not in result.content"
-        - "'<title>This is server web2</title>' not in result.content"
+      register: result_web1
+      retries: 10
+      until: "'<title>This is server web1</title>' in result_web1.content"
+
+    - name: Try to get web2 response from loadbalancer
+      uri:
+        url: http://loadbalancer
+        return_content: true
+      register: result_web2
+      retries: 10
+      until: "'<title>This is server web2</title>' in result_2.content"
