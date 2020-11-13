@@ -145,9 +145,9 @@ touch inventory
 2. Paste this code into inventory
 ```
 [kube]
-loadbalancer ansible_host=12.168.7.2 kubernetes_role=master
-web1 ansible_host=12.168.7.3 kubernetes_role=node
-web2 ansible_host=12.168.7.4 kubernetes_role=node
+loadbalancer ansible_host=12.168.7.2
+web1 ansible_host=12.168.7.3
+web2 ansible_host=12.168.7.4
 
 [kube:vars]
 ansible_ssh_user=vagrant
@@ -155,7 +155,7 @@ ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 ```
 
 Above code do 2 things,
-- Define `kube` group individual variables `ansible_host` and `kubernetes_role`
+- Define `kube` group individual variables `ansible_host`
 - Define `kube `group common shared variables `ansible_ssh_user` and `ansible_ssh_private_key_file`
 
 
