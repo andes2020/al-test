@@ -1,0 +1,17 @@
+---
+# dependency:
+#   name: galaxy
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+driver:
+  name: delegated
+platforms:
+  - name: instance
+provisioner:
+  name: ansible
+  ansible_args:
+    - --inventory=../../inventory
+verifier:
+  name: ansible

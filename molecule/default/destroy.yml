@@ -1,0 +1,10 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: false
+  tasks:
+    - name: Bring vagrant boxes down # noqa 301
+      shell: |
+        vagrant destroy -f

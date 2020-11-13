@@ -1,0 +1,24 @@
+---
+# Limit to just loadbalancer
+- name: Modifiy /etc/nginx/sites-available/default with j2 template
+  template:
+    src: loadbalancer_config.j2
+    dest: /etc/nginx/sites-available/default
+    remote_src: false
+    owner: root
+    group: root
+    mode: 0644
+  run_once: true
+  delegate_to: loadbalancer
+  notify: restart nginx
+  register: updated_nginx_loadbalancer
+
+- name: Test syntax error in nginx config  # noqa 301
+  shell: |
+    nginx -t
+  register: nginx_loadbalancer_syntax_correct
+  failed_when: "'syntax is ok' not in nginx_loadbalancer_syntax_correct.stderr"
+  become: true
+  run_once: true
+  delegate_to: loadbalancer
+  when: updated_nginx_loadbalancer is changed

@@ -1,0 +1,10 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: false
+  tasks:
+    - name: Create vagrant boxes # noqa 301
+      shell: |
+        vagrant up

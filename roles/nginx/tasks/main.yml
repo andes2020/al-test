@@ -1,0 +1,30 @@
+---
+# See apt ansible module https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# See official nginx installation by https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: true
+
+# https://docs.ansible.com/ansible/2.7/modules/ufw_module.html
+- name: Enable ufw
+  ufw:
+    state: enabled
+    policy: allow
+
+- name: Configure firewall to enable port 80 tcp
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: Configure each nginx server custom html page and restart nginx
+  template:
+    src: index.nginx-debian.html.j2
+    dest: /var/www/html/index.nginx-debian.html
+    remote_src: false
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx

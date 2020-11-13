@@ -1,0 +1,13 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: kube
+  become: true
+  tasks:
+    - name: Test nginx is configured with correct html response!
+      uri:
+        url: http://{{ ansible_hostname }}
+        return_content: true
+      register: result
+      failed_when: "'This is server {{ ansible_hostname }}' not in result.content"
