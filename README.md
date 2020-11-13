@@ -8,10 +8,14 @@ Goal: To demo a local infrastructure deployment using vagrant, virtualbox, nginx
 - 2 VM as nodes (Webservers)
 - molecule test is used for idempotency
 
+## Prerequisite
+- Python and pip has been installed, if not, visit 
+https://www.python.org/downloads/
+
 ## Setup 
 
 TL;DR
-- Install vagrant and virtualbox on local os
+- Install Vagrant and virtualbox
 - Create a vagrant file with 3 Vms using ubuntu/bionic64
 - Configure vagrant boxes with same CPU, memory and assign 3 different static ips and hostnames respectively
 - Create ansible inventory file to specify vm connections
@@ -30,7 +34,7 @@ $ pip install -r requirements.txt
 
 - Create an ansible playbook with molecule to automate whole deployment (from vagrant up to nginx configuration, and http page test)
 
-### Steps
+### a) Install vagrant and virtualbox
 1. Download virtualbox 6.1.16 (as the time of writing)
 ```
 https://download.virtualbox.org/virtualbox/6.1.16/VirtualBox-6.1.16-140961-OSX.dmg
@@ -55,7 +59,7 @@ Installed Version: 2.2.10
 Latest Version: 2.2.13
 ```
 
-## Create a vagrant file
+### b) Create a vagrant file
 https://app.vagrantup.com/ubuntu/boxes/bionic64
 
 
@@ -131,7 +135,7 @@ Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-123-generic x86_64)
 ```
 As example output if configured successfully
 
-## Create ansible inventory file
+### c) Create ansible inventory file
 
 Ansible uses inventory to specify correct "host" to connect and do "tasks".
 1. Create "inventory" file
@@ -155,15 +159,15 @@ Above code do 2 things,
 - Define `kube `group common shared variables `ansible_ssh_user` and `ansible_ssh_private_key_file`
 
 
-## Create a default molecule scenario
+### d) Create a default molecule scenario
 ```bash
 $ molecule init scenario
 ```
 
-## Configure molecule create, converge, destroy
+### e) Configure molecule create, converge, destroy
 To create and destroy vagrant boxes automatically
 
-## Create a jinja2 template for nginx deployment test
+### f) Create a jinja2 template for nginx deployment test
 
 - Modify the default /var/www/html/index.nginx-debian.html to insert each vm hostname
 
@@ -172,7 +176,7 @@ This is in ansible role /roles/nginx/tasks/index.nginx-debian.html.j2
 To allow testing of loadbalancer nginx is correct forwarding traffic :)
 
 
-## Modify nginx loadbalancer to redirect traffic to other 2 VMs
+### g) Modify nginx loadbalancer to redirect traffic to other 2 VMs
 
 You can modify the loadbalancer_config.j2 template to add nginx rules.
 
@@ -242,5 +246,6 @@ $ molecule idempotence
 Debug
 ```bash
 $ molecule --debug <lint/test/create/converge/idempotence/verify/destroy etc etc>
+```
 
 HAVE FUN HACKING!
