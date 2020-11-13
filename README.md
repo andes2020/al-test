@@ -248,4 +248,13 @@ Debug
 $ molecule --debug <lint/test/create/converge/idempotence/verify/destroy etc etc>
 ```
 
+
+# Possible improvements idea
+Obviously, this is far from actual production like environment where we would be using actual cloud vms, different applications, remote storage mounts and databases.
+
+Considering this particular `local developement`
+- Local vagrant vm with docker image and kubernetes cluster can be used insteada of creating 3 VMs --> 1 VM only is needed
+- Could install another actual app like wordpress app that uses MySQL and PHP to be more PROD like
+- Pipeline can be implemented when pushing code (Jenkinsfile, ADO template, github workflow)
+
 HAVE FUN HACKING!
