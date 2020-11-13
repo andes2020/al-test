@@ -199,14 +199,14 @@ server{
 
 
 Additional stragety of loadbalance rule can be configured.
-1. Available loadbalancing method in nginx, more info please visit
+1. There are multiple available loadbalancing method in nginx, more info please visit
 (https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/)
 
-2. As example, I choose the random loadbalancing method
+2. As an example, I choose the `least_conn` loadbalancing method
+This method will pass any web request to server with least number of active connections.
 ```
 upstream backend {
-    random two least_time=last_byte;
-#   server 12.168.7.2;
+    least_conn;
     server 12.168.7.3;
     server 12.168.7.4;
 }
@@ -242,3 +242,5 @@ $ molecule idempotence
 Debug
 ```bash
 $ molecule --debug <lint/test/create/converge/idempotence/verify/destroy etc etc>
+
+HAVE FUN HACKING!

@@ -2,7 +2,7 @@
 
 # Define all available server
 upstream backend {
-    random two least_time=last_byte;
+    least_conn;
 #   server 12.168.7.2;
     server 12.168.7.3;
     server 12.168.7.4;
