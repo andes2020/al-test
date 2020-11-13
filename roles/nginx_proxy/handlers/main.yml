@@ -4,3 +4,6 @@
     name: nginx
     enabled: true
     state: restarted
+
+- name: reload nginx
+  service: name=nginx state=reloaded

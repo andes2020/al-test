@@ -1,13 +1,16 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
-- name: Verify
-  hosts: kube
+- name: Verify connection on loadbalancer
+  hosts: loadbalancer
   become: true
   tasks:
-    - name: Test nginx is configured with correct html response!
+
+    # This task curl http://loadbalancer
+    # and check if it reaches web1 or web2
+    - name: Test loadbalancer nginx is configured with correct html response!
       uri:
-        url: http://{{ ansible_hostname }}
+        url: http://loadbalancer
         return_content: true
       register: result
-      failed_when: "'This is server {{ ansible_hostname }}' not in result.content"
+      failed_when:
+        - "'<title>This is server web1</title>' not in result.content"
+        - "'<title>This is server web2</title>' not in result.content"

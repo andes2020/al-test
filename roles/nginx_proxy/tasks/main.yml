@@ -10,7 +10,9 @@
     mode: 0644
   run_once: true
   delegate_to: loadbalancer
-  notify: restart nginx
+  notify:
+    - reload nginx
+    - restart nginx
   register: updated_nginx_loadbalancer
 
 - name: Test syntax error in nginx config  # noqa 301

@@ -176,38 +176,39 @@ To allow testing of loadbalancer nginx is correct forwarding traffic :)
 
 You can modify the loadbalancer_config.j2 template to add nginx rules.
 
-This expose all backend, web1 and web2 services. 
+This expose all backend pool
 ```
 upstream backend {
-  server 12.168.7.2;
+  #server 12.168.7.2; This is the loadbalancer IP (Which we don't expose)
   server 12.168.7.3;
   server 12.168.7.4;
 }
 
-upstream web1 {
-  server 12.168.7.3;
-}
-
-upstream web2 {
-  server 12.168.7.4;
-}
 ```
 
-And this below will instruct loadbalancer to listen to port 80 (HTTP).
-- When http://web1 is requested, loadbalancer will now redirect to `web1` server.
-- When http://web2 is requested, loadbalancer will now redirect to `web2` server.
+And traffic will be loadbalanced into two vms running nginx server with the defined upstream `backend` above
+
+Example: 
 ```
 server{
-    listen 80;
-    location /web1 {
-        rewrite ^/web1(.*) /$1 break;
-        proxy_pass http://web1;
+    location / {
+            proxy_pass http://backend;
     }
+}
+```
 
-    location /web2 {
-        rewrite ^/web2(.*) /$1 break;
-        proxy_pass http://web2;
-    }
+
+Additional stragety of loadbalance rule can be configured.
+1. Available loadbalancing method in nginx, more info please visit
+(https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/)
+
+2. As example, I choose the random loadbalancing method
+```
+upstream backend {
+    random two least_time=last_byte;
+#   server 12.168.7.2;
+    server 12.168.7.3;
+    server 12.168.7.4;
 }
 ```
 
@@ -225,9 +226,19 @@ $ molecule create
 
 Testing continously on created VMs
 ```bash
-$ molecule converge
+$ molecule converge && molecule verify
+```
+
+Linting
+```bash
+$ molecule lint
+```
+
+Testing for idempotency
+```bash
+$ molecule idempotence
 ```
 
 Debug
 ```bash
-$ molecule --debug <test/create/converge/idempotence/verify/destroy etc etc>
+$ molecule --debug <lint/test/create/converge/idempotence/verify/destroy etc etc>
